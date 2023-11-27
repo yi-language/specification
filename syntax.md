@@ -28,7 +28,14 @@ Table is a named structure that holds several primitive data type fields of name
 #### [SPECIAL] Name alias
 Name aliases are synonyms to original data types (and aliases of course **can** alias other aliases as well)  
 
-### Original data type names
+### + Type alias declarations  
+```rust
+fast_u8 :: alias u8
+fast_int :: alias int
+```
+Aliases are used to redeclare types or tables.
+
+### + Original data type names
 #### _Integrals_
 ```glsl
 int, uint, i8, u8, i16, u16, i32, u32, i64, u64, i128, u128, i256, u256
@@ -87,7 +94,7 @@ Here the part _'(x real) real'_ is a type, of function that accepts one 'real' a
 In _yi_ programming language scopes are a blocks of code, that defines lifetime of containing variables.
 ```c
 sin (y real) real {
-    x real = y
+    x real = y * PI
     { /* definition of a new scope */
         x2 real = x * x
         x = x2
@@ -146,7 +153,7 @@ attribute_ptr *int = &attribute
 An example of declaration of a variable _attribute_ptr_ with type of pointer to integer, that points to another variable _attribute_ of type int, that initialized with a value 22.
 
 ### + Arrays
-Arrays and pointers are different sides of the same coin really. Arrays can possibly carry it's length, calculated like (number_of_bytes / size_of_element).
+Arrays and pointers are different sides of the same coin really. Arrays is a pointers that can possibly carry it's count of the elements in a row, calculated like (number_of_bytes / size_of_element).
 ```rust
 greeting [u8] = "Hello, World!"
 ```
@@ -174,6 +181,46 @@ get_os_name () *u8 {
 ```
 A great example of real usecase of this feature. __Explanation:__ we have a three blocks of code, every one of them returns a value immediately; so, if this function compiles under MS Windows machine, only block with attribute 'windows' will be compiled, so function will return _"Windows NT"_; same situation for _linux_ and _darwin_; if our machine's platform is neither windows nor linux nor mac, so the last return statement will return _"Unknown"_.
 
+### + Control flow (if)  
+In _yi_ programming language, like in most common languages there are pretty known _if ... else_ statements.
+```swift
+if x == 3 {
+    ... code goes here ...
+}
+else (x > 3) {
+    ... code goes here ...
+}
+else {
+    ... code goes here ...
+}
+```
+Usage example of if-else statements; especially, parenthesis not required at all; here also a possibility of conditional _else_ statement.
+
+### + Control flow (loop)
+In _yi_ programming language there are no distinguish between _while_ and _for_ loops. And here's the catch: all loops in _yi_ by default is ___infinite___ (yeah, really). And you can restrict amount of iterations by checking for conditions like in _if...else_ statements. Here's an example:
+```swift
+loop        { ... code here will be looped infinitely ... }
+loop true   { ... same situation ... }
+loop false  { ... will never be executed and emit a warning ... }
+loop x      { ... code here will be looped as long as x can be interpreted as true ... }
+```
+
+### + Control flow (cases)
+So, in _yi_ we also have a case-matching statement, mostly like _switch_.
+```swift
+case x {
+    [12] {
+        ... code here executes only when x == 12 ...
+    }
+    [0] {
+        ... code here executes only when x == 0 ...
+    }
+    [...] {
+        ... code here executes only when x variant is not listed in case ...
+    }
+}
+```
+
 ### Summary
 ```c
 import (std, math)
@@ -182,9 +229,12 @@ const MINIMAL_LOOP_COUNT int = 0x10
 
 [_[entry, hidden]_]
 main (args [*u8]) int {
-
-    printout("Hello, world!")
-
+    if (length(args) >= 2) {
+        print("Here is something passed in command prompt")
+    }
+    else {
+        print("Hello, world!")
+    }
     ret 0
 }
 
